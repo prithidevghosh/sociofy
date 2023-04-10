@@ -1,6 +1,9 @@
 const express = require('express')
 const port = process.env.PORT || 3000
 const app = express();
+const homeroute = require('./route/home')
+
+app.use('/', homeroute);
 
 app.listen(port, (e) => {
     if (e) { console.error("error occured in firing up server"); return; }
