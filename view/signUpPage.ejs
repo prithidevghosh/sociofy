@@ -1,0 +1,23 @@
+<div style="text-align:center;">
+    <h3 style="margin-bottom: 20px;">Sign Up</h3>
+</div>
+<form action="/user/createUser" style="width: 40%; margin: 0 auto; background-color: #f2f2f2; padding: 20px;"
+    method="post">
+    <div class="form-group">
+        <label for="email">Email address</label>
+        <input type="email" class="form-control" name="email" placeholder="Enter email">
+    </div>
+    <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" class="form-control" name="name" placeholder="Enter name">
+    </div>
+    <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" class="form-control" name="password" placeholder="Password">
+    </div>
+    <div class="form-group">
+        <label for="confirm-password">Confirm Password</label>
+        <input type="password" class="form-control" name="confirm_password" placeholder="Confirm password">
+    </div>
+    <button type="submit" class="btn btn-primary btn-block mt-4">Sign up</button>
+</form>

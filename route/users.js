@@ -6,6 +6,9 @@ const userRoute = require('../route/users')
 
 route.get('/signIn', userController.signIn)
 route.get('/signUp', userController.signUp)
+route.get('/profilePage', userController.profile)
+route.post('/createUser', userController.createUser)
+route.post('/createSession', userController.createSession)
 
 
 module.exports = route;
