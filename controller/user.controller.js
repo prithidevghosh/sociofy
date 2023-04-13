@@ -7,13 +7,9 @@ module.exports.signUp = (req, res) => {
     return res.render('signUpPage')
 }
 
-module.exports.profile = async (req, res) => {
-    // console.log(req.cookies.user_detail);
-    const userFromDb = await User.findById(req.cookies.user_detail)
-    // console.log(userFromDb);
-    return res.render('profilePage', {
-        'user': userFromDb
-    })
+module.exports.profile = (req, res) => {
+
+    return res.render('profilePage')
 }
 
 module.exports.createUser = async (req, res) => {
@@ -46,20 +42,5 @@ module.exports.createUser = async (req, res) => {
 }
 
 module.exports.createSession = async (req, res) => {
-    const user = await User.find({ email: req.body.email })
-    // console.log(user);
-    if (user.length > 0) {
-
-        if (user[0].password == req.body.password) {
-            res.cookie('user_detail', user[0].id)
-            console.log("matched");
-            return res.redirect('/user/profilePage')
-        }
-
-        console.log("password don't match");
-        return res.redirect('/user/signIn')
-    } else {
-        console.log("user not found");
-        return res.redirect('/user/signUp')
-    }
+    return res.redirect('/')
 }
