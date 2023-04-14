@@ -1,38 +1,84 @@
 <div class="container" style="max-width: 70%;">
     <div class="row">
         <div class="col-md-12">
-            <div class="card" style="margin-bottom: 20px;">
-                <div class="card-body">
-                    <form>
-                        <div class="form-group" style="margin-bottom: 10px;">
-                            <label for="postContent">Post Content</label>
-                            <textarea class="form-control" id="postContent" rows="3"></textarea>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <p class="card-text"><small class="text-muted">Posted by: User Name</small></p>
+            <% if (locals.user) { %>
+                <div class="card" style="margin-bottom: 20px;">
+                    <div class="card-body">
+                        <form method="post" action="/post/create">
+                            <div class="form-group" style="margin-bottom: 10px;">
+                                <label for="postContent">Post Content</label>
+                                <textarea class="form-control" name="content" id="postContent" rows="3"></textarea>
                             </div>
-                            <div class="col-md-6 text-right">
-                                <button type="submit" class="btn btn-primary">Post Comment</button>
+                            <div class="row">
+                                <div class="col-md-6 text-right">
+                                    <button type="submit" class="btn btn-primary">Post it !</button>
+                                </div>
                             </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <div class="card" style="margin-bottom: 20px;">
-                <div class="card-body">
-                    <h5 class="card-title">Post Title</h5>
-                    <p class="card-text">Post Content</p>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <p class="card-text"><small class="text-muted">Posted by: User Name</small></p>
-                        </div>
-                        <div class="col-md-6 text-right">
-                            <a href="#" class="btn btn-primary">Comment</a>
-                        </div>
+                        </form>
                     </div>
                 </div>
-            </div>
+                <% } %>
+
+                    <% if (post.length> 0) { %>
+                        <% for (singlePost of post) { %>
+                            <div class="card" id="feed" style="margin-bottom: 20px;">
+                                <div class="card-body">
+                                    <h5 class="card-title">Post Title</h5>
+                                    <p class="card-text">
+                                        <%= singlePost.content %>
+                                    </p>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <p class="card-text"><small class="text-muted">Posted by: <%=
+                                                        singlePost.user.name %></small></p>
+                                        </div>
+                                        <div class="col-md-6 text-right">
+                                            <a href="#" class="btn btn-primary">Comment</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <% if(singlePost.comments.length>0){ %>
+                                    <% for (singleComment of singlePost.comments){ %>
+                                        <div class="card-body">
+                                            <h5 class="card-title">Comments:</h5>
+                                            <ul class="list-group">
+
+                                                <li class="list-group-item">
+                                                    <p>
+                                                        <%= singleComment.content %>
+                                                    </p>
+                                                    <p class="card-text"><small class="text-muted">Commented by: <%=
+                                                                singleComment.user.name %></small></p>
+                                                    <form class="float-right" style="display: inline;" method="POST">
+                                                        <button type="submit"
+                                                            class="btn btn-danger btn-sm">Delete</button>
+                                                    </form>
+                                                    <a class="float-right mr-2"
+                                                        class="btn btn-secondary btn-sm">Edit</a>
+                                                </li>
+
+                                            </ul>
+                                        </div>
+                                        <%}%>
+                                            <%}%>
+                                                <%if (locals.user ){%>
+                                                    <div class="card-body">
+                                                        <form method="post" action="/comment/create">
+                                                            <div class="form-group">
+                                                                <textarea class="form-control" name="content" rows="2"
+                                                                    placeholder="Add a comment"></textarea>
+                                                                <input type="hidden" name="post"
+                                                                    value="<%=singlePost._id%>">
+                                                            </div>
+                                                            <button type="submit"
+                                                                class="btn btn-primary">Comment</button>
+                                                        </form>
+                                                    </div>
+                                                    <%}%>
+                            </div>
+                            <% } %>
+                                <% } %>
         </div>
     </div>
 </div>

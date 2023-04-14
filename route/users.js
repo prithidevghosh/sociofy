@@ -4,7 +4,7 @@ const homeController = require('../controller/home')
 const userController = require('../controller/user')
 const passport = require('passport')
 const LocalStrategy = require('../config/passport-local-strategy')
-console.log(passport);
+// console.log(passport);
 
 route.get('/signIn', userController.signIn)
 route.get('/signUp', userController.signUp)
