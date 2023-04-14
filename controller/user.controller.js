@@ -1,4 +1,5 @@
 const User = require('../model/userSchema')
+
 module.exports.signIn = (req, res) => {
     return res.render('signInPage')
 }
