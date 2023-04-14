@@ -1,57 +1,62 @@
-const passport = require('passport');
-const User = require('../model/userSchema');
+const Passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy;
+const User = require('../model/userSchema')
 
-passport.use(new LocalStrategy({
-    usernameField: 'email'
+Passport.use(new LocalStrategy({ 
+    usernameField: 'email',
+  
 },
-    async function (email, password, done) {
-        try {
-            const userFetchedDb = await User.findOne({ email: email });
-            if (!userFetchedDb || password != userFetchedDb.password) {
-                console.log("user not found/password not matching");
-                return done(null, false);
-            }
-            else {
-                return done(null, userFetchedDb);
-            }
-        } catch (error) {
-            return done(error);
-        }
+    function (email, password, done) {
+        User.findOne({ email: email }).then(function (user) {
+            if (!user || user.password != password) {return done(null, false); }
+            return done(null, user);
+        }).catch((err)=>{if (err) { return done(err); }});
     }
+));
 
-))
+//serializing means extarcting unique thing and setting the cookie like userid
 
-passport.serializeUser((user, done) => {
+Passport.serializeUser((user, done) => {
     done(null, user.id)
 })
 
-passport.deserializeUser(async (id, done) => {
-    try {
-        const userFetchedDb = await User.findById(id);
-        if (userFetchedDb) {
-            return done(null, userFetchedDb);
+
+
+//desrializing is extarcting cookie and getting user oject from it
+Passport.deserializeUser((id, done)=>{
+    User.findById(id, (err, user)=>{
+        if(err){
+            console.log("error getting user-----> Passport");
+            return done(err);
         }
-    } catch (error) {
-        return done(error);
-    }
+        return done(null, user);
+    })
 })
 
-passport.checkAuthentication = function (req, res, next) {
-
-    if (req.isAuthenticated()) {
+//check user authentication 
+Passport.checkAuthentication = (req, res, next)=>{
+    //this is is method that Passport puts in req
+    //if user is authenticated pass to the next cantroller function 
+    if(req.isAuthenticated()){
         return next()
     }
-    return res.redirect('/user/signIn')
+
+    //if user is not signed in
+    return res.redirect('/users/sign-in')
+
 }
 
-passport.setAuthenticatedUser = (req, res, next) => {
-    if (req.isAuthenticated()) {
-        res.locals.user = req.user;
-        next();
+
+
+Passport.setAuthenticatedUser = (req, res, next)=>{
+    if(req.isAuthenticated()){
+        res.locals.user = req.user
     }
-
+    next();
 }
 
 
-module.exports = passport;
+
+
+
+module.exports = Passport;

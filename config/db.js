@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const mongoURI = "mongodb+srv://prithidevghosh:39039820@cluster0.3amaqwo.mongodb.net/sociofy"
+const mongoURI = "mongodb://127.0.0.1/testss"
 
 mongoose.connect(mongoURI, { useUnifiedTopology: true, useNewUrlParser: true })
 
