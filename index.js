@@ -9,6 +9,8 @@ const passport = require('passport')
 const session = require('express-session');
 const LocalStrategy = require('./config/passport-local-strategy')
 const MongoStore = require('connect-mongo');
+const flash = require('connect-flash');
+const customMware = require('./config/middleware')
 
 
 
@@ -17,6 +19,8 @@ app.use(express.urlencoded());
 app.use(cookieParser());
 
 app.use(expresslayout)
+app.set("layout extractStyles", true)
+app.set("layout extractScripts", true)
 
 app.use(express.static('./assets'))
 
@@ -40,11 +44,13 @@ app.use(session({
 // console.log(passport);
 app.use(passport.initialize());
 app.use(passport.session());
-
-
 app.use(passport.setAuthenticatedUser)
+app.use(flash());
+app.use(customMware.setFlash);
+
 
 app.use('/', homeroute);
+
 
 app.listen(port, (e) => {
     if (e) { console.error("error occured in firing up server"); return; }

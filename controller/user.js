@@ -15,18 +15,20 @@ module.exports.signUp = (req, res) => {
 }
 
 module.exports.profile = async (req, res) => {
-    // try {
-    //     const userFetchedDb = await User.findById(req.cookies.user_id)
-    //     return res.render('profilePage', {
-    //         user: userFetchedDb
-    //     })
-    // } catch (error) {
-    //     console.log(error);
-    // }
+    try {
+        const userFetchedDb = await User.findById(req.params.id);
+        if (userFetchedDb) {
+            return res.render('profilePage', {
+                user_profile: userFetchedDb
+            })
+        }
+    } catch (error) {
+        console.log(error);
+    }
 
-    return res.render('profilePage')
 
 }
+
 
 module.exports.createUser = async (req, res) => {
 
@@ -58,21 +60,25 @@ module.exports.createUser = async (req, res) => {
 }
 
 module.exports.createSession = async (req, res) => {
-    // try {
-    //     const userFetchedDb = await User.findOne({ email: req.body.email });
-    //     if (userFetchedDb) {
-    //         if (userFetchedDb.password == req.body.password) {
-    //             res.cookie('user_id', userFetchedDb.id);
-    //             return res.redirect('/user/profilePage')
-    //         }
-    //     }
-    // } catch (error) {
-    //     console.log(error);
-    // }
-    return res.redirect('/user/profilePage');
+    req.flash('success', 'logged in successfully')
+    return res.redirect('/');
 }
 
 module.exports.destroySession = (req, res) => {
+
     req.logout(() => { });
+    req.flash('success', 'logged out successfully')
     return res.redirect('/');
+}
+
+module.exports.update = async (req, res) => {
+    try {
+        const userFetchedDb = await User.findById(req.params.id);
+        if (userFetchedDb.id == req.user.id) {
+            const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body);
+            return res.redirect('back')
+        }
+    } catch (error) {
+        console.log(error);
+    }
 }

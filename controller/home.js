@@ -12,9 +12,15 @@ module.exports.home = async (req, res) => {
             })
             .exec();
 
-        return res.render('homepage', {
-            post: allPostsFetchedDb
-        })
+        const userFetchedDb = await User.find({});
+        if (userFetchedDb) {
+            return res.render('homepage', {
+                all_users: userFetchedDb,
+                post: allPostsFetchedDb
+            })
+        }
+
+
     } catch (error) {
         console.log(error);
     }

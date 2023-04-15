@@ -1,10 +1,30 @@
-<div class="container" style="max-width: 70%;">
+<div class="container" style="margin-left: 0%;">
+
+
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-3 pl-0">
+            <!-- Left Sidebar with Friends List -->
+            <div class="card" style="margin-bottom: 20px;">
+                <div class="card-body">
+                    <h5 class="card-title">Friends</h5>
+                    <ul class="list-group">
+                        <%for(user of all_users){%>
+                            <li class="list-group-item">
+                                <a href="/user/profilePage/<%=user.id%>">
+                                    <%=user.name%>
+                                </a>
+                            </li>
+                            <%}%>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-9">
             <% if (locals.user) { %>
                 <div class="card" style="margin-bottom: 20px;">
                     <div class="card-body">
-                        <form method="post" action="/post/create">
+                        <form method="post" id="post-create" action="/post/create">
                             <div class="form-group" style="margin-bottom: 10px;">
                                 <label for="postContent">Post Content</label>
                                 <textarea class="form-control" name="content" id="postContent" rows="3"></textarea>
@@ -32,9 +52,10 @@
                                             <p class="card-text"><small class="text-muted">Posted by: <%=
                                                         singlePost.user.name %></small></p>
                                         </div>
-                                        <div class="col-md-6 text-right">
-                                            <a href="#" class="btn btn-primary">Comment</a>
-                                        </div>
+                                        <% if(locals.user && (locals.user.id==singlePost.user.id)){ %>
+                                            <a href="/post/delete/<%= singlePost._id%>">Delete </a>
+                                            <%}%>
+
                                     </div>
                                 </div>
 
@@ -50,12 +71,15 @@
                                                     </p>
                                                     <p class="card-text"><small class="text-muted">Commented by: <%=
                                                                 singleComment.user.name %></small></p>
-                                                    <form class="float-right" style="display: inline;" method="POST">
-                                                        <button type="submit"
-                                                            class="btn btn-danger btn-sm">Delete</button>
-                                                    </form>
-                                                    <a class="float-right mr-2"
-                                                        class="btn btn-secondary btn-sm">Edit</a>
+                                                    <% if(locals.user && (locals.user.id==singleComment.user.id)){ %>
+                                                        <form action="/comment/delete/<%=singleComment._id%>"
+                                                            class="float-right" style="display: inline;" method="get">
+                                                            <button type="submit"
+                                                                class="btn btn-danger btn-sm">Delete</button>
+                                                        </form>
+                                                        <%}%>
+                                                            <a class="float-right mr-2"
+                                                                class="btn btn-secondary btn-sm">Edit</a>
                                                 </li>
 
                                             </ul>
@@ -82,3 +106,5 @@
         </div>
     </div>
 </div>
+
+<script src="/js/homePage.js"></script>
